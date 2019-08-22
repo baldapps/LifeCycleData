@@ -19,8 +19,9 @@ package com.balda.lifecycledata;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
 
 @SuppressWarnings("unused")
 public class LifeCycleDataProvider {

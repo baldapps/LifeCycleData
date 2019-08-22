@@ -19,7 +19,9 @@ package com.balda.lifecycledata;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
+
 
 public class AppLifeCycleData extends LifeCycleData {
     @SuppressLint("StaticFieldLeak")

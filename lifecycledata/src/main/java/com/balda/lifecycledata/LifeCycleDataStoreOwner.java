@@ -17,7 +17,7 @@
  */
 package com.balda.lifecycledata;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public interface LifeCycleDataStoreOwner {
     @NonNull
