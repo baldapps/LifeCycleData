@@ -41,6 +41,7 @@ public class HolderFragment extends Fragment implements LifeCycleDataStoreOwner 
     public static final String HOLDER_TAG = "HolderFragment";
     private LifeCycleDataStore lifeCycleDataStore = new LifeCycleDataStore();
 
+    @SuppressWarnings("deprecation")
     public HolderFragment() {
         setRetainInstance(true);
     }
@@ -86,37 +87,37 @@ public class HolderFragment extends Fragment implements LifeCycleDataStoreOwner 
                 .ActivityLifecycleCallbacks() {
 
             @Override
-            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+            public void onActivityCreated(@NonNull Activity activity, Bundle savedInstanceState) {
 
             }
 
             @Override
-            public void onActivityStarted(Activity activity) {
+            public void onActivityStarted(@NonNull Activity activity) {
 
             }
 
             @Override
-            public void onActivityResumed(Activity activity) {
+            public void onActivityResumed(@NonNull Activity activity) {
 
             }
 
             @Override
-            public void onActivityPaused(Activity activity) {
+            public void onActivityPaused(@NonNull Activity activity) {
 
             }
 
             @Override
-            public void onActivityStopped(Activity activity) {
+            public void onActivityStopped(@NonNull Activity activity) {
 
             }
 
             @Override
-            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+            public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {
 
             }
 
             @Override
-            public void onActivityDestroyed(Activity activity) {
+            public void onActivityDestroyed(@NonNull Activity activity) {
                 HolderFragment fragment = mNotCommittedActivityHolders.remove(activity);
                 if (fragment != null) {
                     Log.e(LOG_TAG, "Failed to save a LifeCycleData for " + activity);
@@ -126,17 +127,23 @@ public class HolderFragment extends Fragment implements LifeCycleDataStoreOwner 
 
         private boolean mActivityCallbacksIsAdded = false;
 
-        private FragmentManager.FragmentLifecycleCallbacks mParentDestroyedCallback = new FragmentManager
-                .FragmentLifecycleCallbacks() {
-            @Override
-            public void onFragmentDestroyed(FragmentManager fm, Fragment parentFragment) {
-                super.onFragmentDestroyed(fm, parentFragment);
-                HolderFragment fragment = mNotCommittedFragmentHolders.remove(parentFragment);
-                if (fragment != null) {
-                    Log.e(LOG_TAG, "Failed to save a LifeCycleData for " + parentFragment);
-                }
+        public HolderFragmentManager() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                //noinspection deprecation
+                mParentDestroyedCallback = new FragmentManager.FragmentLifecycleCallbacks() {
+                    @Override
+                    public void onFragmentDestroyed(FragmentManager fm, Fragment parentFragment) {
+                        super.onFragmentDestroyed(fm, parentFragment);
+                        HolderFragment fragment = mNotCommittedFragmentHolders.remove(parentFragment);
+                        if (fragment != null) {
+                            Log.e(LOG_TAG, "Failed to save a LifeCycleData for " + parentFragment);
+                        }
+                    }
+                };
             }
-        };
+        }
+
+        private FragmentManager.FragmentLifecycleCallbacks mParentDestroyedCallback;
 
         void holderFragmentCreated(Fragment holderFragment) {
             Fragment parentFragment = holderFragment.getParentFragment();
